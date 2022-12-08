@@ -1,5 +1,6 @@
 import type { DocumentContext, DocumentInitialProps } from 'next/document';
 import Document, { Html, Head, Main, NextScript } from 'next/document';
+import { interFont } from '../lib/myNextFonts';
 
 class CustomDocument extends Document {
   static async getInitialProps(
@@ -14,7 +15,9 @@ class CustomDocument extends Document {
     return (
       <Html>
         <Head />
-        <body>
+        <body
+          className={`${interFont.variable} bg-slate-100 font-inter text-slate-800`}
+        >
           <Main />
           <NextScript />
         </body>
