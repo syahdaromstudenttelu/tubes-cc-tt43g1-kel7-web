@@ -1,0 +1,36 @@
+{
+  "name": "tubes-cc-tt43g1-kel7-web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "format": "prettier -w \"**/*.{js,jsx,ts,tsx,json,yaml,yml,css,md,mdx}\"",
+    "format:c": "prettier -c \"**/*.{js,jsx,ts,tsx,json,yaml,yml,css,md,mdx}\"",
+    "prepare": "husky install"
+  },
+  "dependencies": {
+    "@types/node": "18.11.11",
+    "@types/react": "18.0.26",
+    "@types/react-dom": "18.0.9",
+    "eslint": "8.29.0",
+    "eslint-config-next": "13.0.6",
+    "next": "13.0.6",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "typescript": "^4.9.4"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.13",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-mdx": "^2.0.5",
+    "lint-staged": "^13.1.0",
+    "postcss": "^8.4.19",
+    "prettier": "2.8.1",
+    "prettier-plugin-tailwindcss": "^0.2.0",
+    "tailwindcss": "^3.2.4",
+    "husky": "^8.0.0"
+  }
+}
