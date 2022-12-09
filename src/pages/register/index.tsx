@@ -9,6 +9,8 @@ import { ralewayFont } from '../../lib/myNextFonts';
 export default function Login() {
   const [userEmail, setUserEmail] = useState('');
   const [userPassword, setUserPassword] = useState('');
+  const btnDisabledStatus =
+    userEmail === '' || userPassword === '' || userPassword.length < 6;
 
   const onEmailInput = (e: ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.currentTarget.value;
@@ -65,7 +67,7 @@ export default function Login() {
                     <Input
                       id="password-input"
                       type="password"
-                      placeholder="Password"
+                      placeholder="Password (min 6 karakter)"
                       value={userPassword}
                       onChange={onPasswordInput}
                     />
@@ -73,7 +75,12 @@ export default function Login() {
                 </section>
 
                 <section>
-                  <PrimaryButton onClick={onRegister}>Buat akun</PrimaryButton>
+                  <PrimaryButton
+                    disabled={btnDisabledStatus}
+                    onClick={onRegister}
+                  >
+                    Buat akun
+                  </PrimaryButton>
                 </section>
               </form>
             </div>
