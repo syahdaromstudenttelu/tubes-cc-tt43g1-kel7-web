@@ -12,14 +12,14 @@ export default function SecondaryButton(props: SecondaryButtonProps) {
     children,
     type: _type,
     className: _className,
-    ...buttonProps
+    ...otherButtonProps
   } = props;
 
   return (
     <button
       type="button"
-      className={`${interFont.variable} text-lg" font-poppins-sb inline-block w-full rounded-lg border-4 border-slate-800 py-3 text-center`}
-      {...buttonProps}
+      className={`${interFont.variable} inline-block w-full rounded-lg border-4 border-slate-800 py-3 text-center font-inter text-lg font-semibold disabled:border-slate-400 disabled:text-slate-400`}
+      {...otherButtonProps}
     >
       {children}
     </button>

@@ -13,14 +13,14 @@ export default function PrimaryButton(props: PrimaryButtonProps) {
     children,
     type: _type,
     className: _className,
-    ...buttonProps
+    ...otherButtonProps
   } = props;
 
   return (
     <button
       type="button"
-      className={`${interFont.variable} text-slate-100" inline-block w-full rounded-lg bg-slate-800 py-3 text-center font-inter font-semibold text-slate-100`}
-      {...buttonProps}
+      className={`${interFont.variable} inline-block w-full rounded-lg bg-slate-800 py-3 text-center font-inter font-semibold text-slate-100 disabled:text-slate-600`}
+      {...otherButtonProps}
     >
       {children}
     </button>
