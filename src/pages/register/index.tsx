@@ -7,7 +7,7 @@ import { Input } from '../../components/form-inputs';
 import ErrorMessage from '../../components/ErrorMessage';
 import { ralewayFont } from '../../lib/myNextFonts';
 
-export default function Login() {
+export default function Register() {
   const [userEmail, setUserEmail] = useState('');
   const [userPassword, setUserPassword] = useState('');
   const [showErrorMsg, setShowErrorMsg] = useState(false);
