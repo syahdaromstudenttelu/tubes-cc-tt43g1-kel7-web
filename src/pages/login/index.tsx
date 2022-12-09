@@ -9,6 +9,7 @@ import { ralewayFont } from '../../lib/myNextFonts';
 export default function Login() {
   const [userEmail, setUserEmail] = useState('');
   const [userPassword, setUserPassword] = useState('');
+  const btnDisabledStatus = userEmail === '' || userPassword === '';
 
   const onEmailInput = (e: ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.currentTarget.value;
@@ -73,7 +74,9 @@ export default function Login() {
                 </section>
 
                 <section>
-                  <PrimaryButton onClick={onLogin}>Masuk</PrimaryButton>
+                  <PrimaryButton disabled={btnDisabledStatus} onClick={onLogin}>
+                    Masuk
+                  </PrimaryButton>
                 </section>
               </form>
             </div>
