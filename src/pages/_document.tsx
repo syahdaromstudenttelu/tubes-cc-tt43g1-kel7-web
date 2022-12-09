@@ -1,6 +1,6 @@
 import type { DocumentContext, DocumentInitialProps } from 'next/document';
-import Document, { Html, Head, Main, NextScript } from 'next/document';
 import { interFont } from '../lib/myNextFonts';
+import Document, { Html, Head, Main, NextScript } from 'next/document';
 
 class CustomDocument extends Document {
   static async getInitialProps(

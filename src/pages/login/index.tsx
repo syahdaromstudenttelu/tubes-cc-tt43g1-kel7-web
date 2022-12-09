@@ -1,11 +1,11 @@
 import type { ChangeEvent } from 'react';
 import { useState } from 'react';
+import { ralewayFont } from '../../lib/myNextFonts';
 import Head from 'next/head';
 import Link from 'next/link';
 import { PrimaryButton } from '../../components/buttons';
 import { Input } from '../../components/form-inputs';
 import ErrorMessage from '../../components/ErrorMessage';
-import { ralewayFont } from '../../lib/myNextFonts';
 
 export default function Login() {
   const [userEmail, setUserEmail] = useState('');

@@ -1,9 +1,9 @@
+import { ralewayFont, interFont } from '../lib/myNextFonts';
 import Head from 'next/head';
 import {
   PrimaryButtonLink,
   SecondaryButtonLink,
 } from '../components/button-links';
-import { ralewayFont, interFont } from '../lib/myNextFonts';
 
 export default function Home() {
   return (
