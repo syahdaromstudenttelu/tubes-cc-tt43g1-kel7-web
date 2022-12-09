@@ -56,7 +56,7 @@ export default function Home() {
                 </div>
 
                 <div className="mx-auto grid max-w-lg gap-y-4">
-                  <PrimaryButtonLink hrefPath="/">Masuk</PrimaryButtonLink>
+                  <PrimaryButtonLink hrefPath="/login">Masuk</PrimaryButtonLink>
 
                   <SecondaryButtonLink hrefPath="/">
                     Registrasi
