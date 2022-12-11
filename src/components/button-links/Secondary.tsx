@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import type { UrlObject } from 'url';
-import Link from 'next/link';
 import { interFont } from '../../lib/myNextFonts';
+import Link from 'next/link';
 
 interface SecondaryButtonLinkProps {
   children: ReactNode;
