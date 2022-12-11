@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router';
 import { useAppSelector } from '../../redux-app/typed-hook/typedHooks';
 import { userBookedTicketsSelector } from '../../redux-app/slices/userBookedTicketsSlice';
 import { ralewayFont, interFont } from '../../lib/myNextFonts';
@@ -7,7 +6,6 @@ import ProfileButton from '../../components/ProfileButton';
 import BookedTicketCard from '../../components/BookedTicketCard';
 
 export default function Dashboard() {
-  const nextRouter = useRouter();
   const userBookedTickets = useAppSelector(userBookedTicketsSelector);
 
   const userBookedTicketCards = userBookedTickets.map((userBookedTicket) => {
@@ -27,7 +25,7 @@ export default function Dashboard() {
             <nav className="mb-8 flex items-center justify-between">
               <div>
                 <Link
-                  href={`/${nextRouter.query.username}/book-ticket/date`}
+                  href={`/book-ticket/date`}
                   className="inline-block rounded px-2 py-1 transition-colors duration-300 hover:bg-gray-200"
                 >
                   Pesan tiket
@@ -49,10 +47,7 @@ export default function Dashboard() {
             {userBookedTickets.length === 0 && (
               <p className="mx-auto w-max rounded-md bg-gray-200 px-3 py-2 text-center text-gray-500">
                 Anda belum memesan tiket sebelumnya.{' '}
-                <Link
-                  href={`/${nextRouter.query.username}/book-ticket/date`}
-                  className="underline"
-                >
+                <Link href={`/book-ticket/date`} className="underline">
                   Yukk, pesan tiket sekarang
                 </Link>
               </p>
