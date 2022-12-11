@@ -57,7 +57,7 @@ export default function BookTicketDate() {
 
   const onBookSitBtn = () => {
     if (disableBookSitBtn) return;
-    nextRouter.push(`/book-ticket/sit`);
+    nextRouter.replace(`/book-ticket/sit`);
   };
 
   const onClearBookTicket = () => {
