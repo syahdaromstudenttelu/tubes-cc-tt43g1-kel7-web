@@ -12,6 +12,7 @@ interface BookTicketProps {
   bookSitPos: TicketSitValue;
   bookPassangerName: string;
   bookPassangerPhone: string;
+  bookTotalPayment: number;
 }
 
 const initialState: BookTicketProps = {
@@ -22,6 +23,7 @@ const initialState: BookTicketProps = {
   bookSitPos: null,
   bookPassangerName: '',
   bookPassangerPhone: '',
+  bookTotalPayment: 0,
 };
 
 export const bookTicketSlice = createSlice({
@@ -62,6 +64,9 @@ export const bookTicketSlice = createSlice({
     setBookPassangerPhone: (state, action: PayloadAction<string>) => {
       state.bookPassangerPhone = action.payload;
     },
+    setBookTotalPayment: (state, action: PayloadAction<number>) => {
+      state.bookTotalPayment = action.payload;
+    },
   },
 });
 
@@ -73,6 +78,7 @@ export const {
   setBookSitPos,
   setBookPassangerName,
   setBookPassangerPhone,
+  setBookTotalPayment,
 } = bookTicketSlice.actions;
 
 export const bookTicketInputSelector = (state: RootState) => state.bookTicket;
