@@ -27,7 +27,7 @@ export default function Dashboard() {
             <nav className="mb-8 flex items-center justify-between">
               <div>
                 <Link
-                  href={`/${nextRouter.query.username}`}
+                  href={`/${nextRouter.query.username}/book-ticket/date`}
                   className="inline-block rounded px-2 py-1 transition-colors duration-300 hover:bg-gray-200"
                 >
                   Pesan tiket
@@ -50,7 +50,7 @@ export default function Dashboard() {
               <p className="mx-auto w-max rounded-md bg-gray-200 px-3 py-2 text-center text-gray-500">
                 Anda belum memesan tiket sebelumnya.{' '}
                 <Link
-                  href={`/${nextRouter.query.username}`}
+                  href={`/${nextRouter.query.username}/book-ticket/date`}
                   className="underline"
                 >
                   Yukk, pesan tiket sekarang
