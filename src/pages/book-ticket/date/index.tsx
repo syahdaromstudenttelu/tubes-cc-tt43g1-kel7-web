@@ -4,22 +4,22 @@ import { format } from 'date-fns';
 import {
   useAppDispatch,
   useAppSelector,
-} from '../../../../redux-app/typed-hook/typedHooks';
+} from '../../../redux-app/typed-hook/typedHooks';
 import {
   setBookFrom,
   setBookTo,
   setBookDate,
   setBookShift,
   setBookSitPos,
-} from '../../../../redux-app/slices/bookTicketSlice';
-import { bookTicketInputSelector } from '../../../../redux-app/slices/bookTicketSlice';
-import { ralewayFont, interFont } from '../../../../lib/myNextFonts';
+} from '../../../redux-app/slices/bookTicketSlice';
+import { bookTicketInputSelector } from '../../../redux-app/slices/bookTicketSlice';
+import { ralewayFont, interFont } from '../../../lib/myNextFonts';
 import Head from 'next/head';
 import Link from 'next/link';
-import ProfileButton from '../../../../components/ProfileButton';
-import { PrimaryButton } from '../../../../components/buttons';
-import CityOptions from '../../../../components/book-ticket-date/CityOptions';
-import ShiftOptions from '../../../../components/book-ticket-date/ShiftOptions';
+import ProfileButton from '../../../components/ProfileButton';
+import { PrimaryButton } from '../../../components/buttons';
+import CityOptions from '../../../components/book-ticket-date/CityOptions';
+import ShiftOptions from '../../../components/book-ticket-date/ShiftOptions';
 
 export default function BookTicketDate() {
   const nextRouter = useRouter();
@@ -57,7 +57,7 @@ export default function BookTicketDate() {
 
   const onBookSitBtn = () => {
     if (disableBookSitBtn) return;
-    nextRouter.push(`/${nextRouter.query.username}/book-ticket/sit`);
+    nextRouter.push(`/book-ticket/sit`);
   };
 
   const onClearBookTicket = () => {
@@ -110,7 +110,7 @@ export default function BookTicketDate() {
                   <div>
                     <Link
                       className="inline-block rounded-lg bg-slate-200/50 px-2 py-1 transition-colors duration-300 hover:bg-slate-200 hover:outline-none"
-                      href={`/${nextRouter.query.username}`}
+                      href={`/`}
                       onClick={onClearBookTicket}
                     >
                       Tiket Anda
@@ -142,7 +142,7 @@ export default function BookTicketDate() {
                             value={bookFrom}
                             onChange={onInputBookFrom}
                           >
-                            <CityOptions toOrFrom="from" />
+                            <CityOptions fromOrTo="from" />
                           </select>
                         </label>
 
@@ -153,7 +153,7 @@ export default function BookTicketDate() {
                             value={bookTo}
                             onChange={onInputBookTo}
                           >
-                            <CityOptions toOrFrom="to" />
+                            <CityOptions fromOrTo="to" />
                           </select>
                         </label>
                       </div>

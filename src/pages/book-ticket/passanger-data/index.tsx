@@ -1,9 +1,8 @@
 import type { ChangeEvent } from 'react';
-import { useRouter } from 'next/router';
 import {
   useAppDispatch,
   useAppSelector,
-} from '../../../../redux-app/typed-hook/typedHooks';
+} from '../../../redux-app/typed-hook/typedHooks';
 import {
   setBookFrom,
   setBookTo,
@@ -12,18 +11,17 @@ import {
   setBookSitPos,
   setBookPassangerName,
   setBookPassangerPhone,
-} from '../../../../redux-app/slices/bookTicketSlice';
-import { bookTicketInputSelector } from '../../../../redux-app/slices/bookTicketSlice';
-import { ralewayFont, interFont } from '../../../../lib/myNextFonts';
+} from '../../../redux-app/slices/bookTicketSlice';
+import { bookTicketInputSelector } from '../../../redux-app/slices/bookTicketSlice';
+import { ralewayFont, interFont } from '../../../lib/myNextFonts';
 import Head from 'next/head';
 import Link from 'next/link';
-import ProfileButton from '../../../../components/ProfileButton';
-import { PrimaryButton } from '../../../../components/buttons';
-import { SecondaryButtonLink } from '../../../../components/button-links';
-import { Input } from '../../../../components/form-inputs';
+import ProfileButton from '../../../components/ProfileButton';
+import { PrimaryButton } from '../../../components/buttons';
+import { SecondaryButtonLink } from '../../../components/button-links';
+import { Input } from '../../../components/form-inputs';
 
 export default function BookTicketSit() {
-  const nextRouter = useRouter();
   const reduxDispatch = useAppDispatch();
   const { bookPassangerName, bookPassangerPhone } = useAppSelector(
     bookTicketInputSelector
@@ -98,7 +96,7 @@ export default function BookTicketSit() {
                   <div>
                     <Link
                       className="inline-block rounded-lg bg-slate-200/50 px-2 py-1 transition-colors duration-300 hover:bg-slate-200 hover:outline-none"
-                      href={`/${nextRouter.query.username}`}
+                      href={`/`}
                       onClick={onClearBookTicket}
                     >
                       Tiket Anda
@@ -172,9 +170,7 @@ export default function BookTicketSit() {
                         </PrimaryButton>
                       </div>
 
-                      <SecondaryButtonLink
-                        hrefPath={`/${nextRouter.query.username}/book-ticket/sit`}
-                      >
+                      <SecondaryButtonLink hrefPath={`/book-ticket/sit`}>
                         Kembali
                       </SecondaryButtonLink>
                     </section>
