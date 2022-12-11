@@ -1,6 +1,5 @@
 import type { MouseEvent } from 'react';
 import { useState } from 'react';
-import { useRouter } from 'next/router';
 import cn from 'classnames';
 
 interface ProfileButtonProps {
@@ -8,10 +7,11 @@ interface ProfileButtonProps {
 }
 
 export default function ProfileButton({
-  onSignOut = () => {},
+  onSignOut = () => {
+    return;
+  },
 }: ProfileButtonProps) {
   const [closeProfileMenu, setCloseProfileMenu] = useState(true);
-  const nextRouter = useRouter();
 
   const onProfileMenu = () => setCloseProfileMenu((prevValue) => !prevValue);
 
@@ -22,7 +22,7 @@ export default function ProfileButton({
         className="inline-block rounded bg-gray-200 px-2 py-1 font-semibold"
         onClick={onProfileMenu}
       >
-        Hi, {nextRouter.query.username}!
+        Hi, username!
       </button>
 
       <button
