@@ -1,36 +1,38 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
-import type { RootState } from '../store/store';
 import { createSlice } from '@reduxjs/toolkit';
+import type { RootState } from '../store/store';
 
-interface BookTicketAvailabilityData {
+export interface TicketAvailabilityProps {
+  allBooked: boolean;
+  shifts: {
+    morning: {
+      allBooked: boolean;
+      bookedSits: {
+        '1': boolean;
+        '2': boolean;
+        '3': boolean;
+        '4': boolean;
+        '5': boolean;
+      };
+    };
+    afternoon: {
+      allBooked: boolean;
+      bookedSits: {
+        '1': boolean;
+        '2': boolean;
+        '3': boolean;
+        '4': boolean;
+        '5': boolean;
+      };
+    };
+  };
+}
+
+export interface BookTicketAvailabilityData {
   codeDestination: string;
   ticketDates: {
     ticketDate: string;
-    ticketAvailability: {
-      allBooked: boolean;
-      shifts: {
-        morning: {
-          allBooked: boolean;
-          bookedSits: {
-            '1': boolean;
-            '2': boolean;
-            '3': boolean;
-            '4': boolean;
-            '5': boolean;
-          };
-        };
-        afternoon: {
-          allBooked: boolean;
-          bookedSits: {
-            '1': boolean;
-            '2': boolean;
-            '3': boolean;
-            '4': boolean;
-            '5': boolean;
-          };
-        };
-      };
-    };
+    ticketAvailability: TicketAvailabilityProps;
   }[];
 }
 
@@ -48,9 +50,9 @@ export const bookTicketAvailabilitySlice = createSlice({
   reducers: {
     addBookTicketAvailability: (
       state,
-      action: PayloadAction<BookTicketAvailabilityData>
+      action: PayloadAction<BookTicketAvailabilityData[]>
     ) => {
-      state.data.push(action.payload);
+      state.data = action.payload;
     },
   },
 });
