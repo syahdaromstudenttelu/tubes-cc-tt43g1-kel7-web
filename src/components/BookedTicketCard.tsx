@@ -1,28 +1,57 @@
-import type { MouseEvent } from 'react';
+import { format } from 'date-fns';
+import { useRouter } from 'next/router';
+import { ticketExpChecker } from '../lib/ticketExpChecker';
+import {
+  setBookDate,
+  setBookFrom,
+  setBookPassangerName,
+  setBookPassangerPhone,
+  setBookShift,
+  setBookSitPos,
+  setBookTo,
+  setBookTotalPayment,
+  setTicketId,
+} from '../redux-app/slices/bookTicketSlice';
+import type { BookedTicketProps } from '../redux-app/slices/userBookedTicketsSlice';
+import { useAppDispatch } from '../redux-app/typed-hook/typedHooks';
 import { PrimaryButton } from './buttons';
-
-interface BookedTicketCardProps {
-  bookedTicketData: {
-    ticketId: string;
-    bookedDate: string;
-    destination: {
-      to: string;
-      from: string;
-    };
-    sitPos: number;
-    passangerName: string;
-    passangerPhone: string;
-    totalPayment: number;
-    paidOff: boolean;
-  };
-
-  onBtnPay?: (e: MouseEvent<HTMLButtonElement>) => void;
-}
 
 export default function BookedTicketCard({
   bookedTicketData,
-  onBtnPay = () => {},
-}: BookedTicketCardProps) {
+}: {
+  bookedTicketData: BookedTicketProps;
+}) {
+  const nextRouter = useRouter();
+  const reduxDispatch = useAppDispatch();
+
+  const disableButtonPay = () => {
+    if (bookedTicketData.paidOff) return true;
+
+    if (
+      ticketExpChecker(
+        bookedTicketData.bookedShift,
+        bookedTicketData.bookedDate
+      ) === true
+    )
+      return true;
+
+    return false;
+  };
+
+  const onBtnPay = () => {
+    if (bookedTicketData.paidOff) return;
+    reduxDispatch(setTicketId(bookedTicketData.ticketId));
+    reduxDispatch(setBookFrom(bookedTicketData.destination.from));
+    reduxDispatch(setBookTo(bookedTicketData.destination.to));
+    reduxDispatch(setBookDate(bookedTicketData.bookedDate));
+    reduxDispatch(setBookShift(bookedTicketData.bookedShift));
+    reduxDispatch(setBookSitPos(bookedTicketData.sitPos));
+    reduxDispatch(setBookPassangerName(bookedTicketData.passangerName));
+    reduxDispatch(setBookPassangerPhone(bookedTicketData.passangerPhone));
+    reduxDispatch(setBookTotalPayment(bookedTicketData.totalPayment));
+    nextRouter.push('/ticket-payment');
+  };
+
   return (
     <div className="rounded-md bg-gray-200 p-4">
       <div className="mb-4">
@@ -33,7 +62,14 @@ export default function BookedTicketCard({
 
         <p>
           <span className="font-bold">(Tanggal Tiket)</span>{' '}
-          {bookedTicketData.bookedDate}
+          {format(new Date(bookedTicketData.bookedDate), 'dd-MM-yyyy')}
+        </p>
+
+        <p>
+          <span className="font-bold">(Tanggal Tiket)</span>{' '}
+          {bookedTicketData.bookedShift === 'morning'
+            ? 'Pagi (08.00)'
+            : 'Sore (16.00)'}
         </p>
 
         <p>
@@ -71,8 +107,25 @@ export default function BookedTicketCard({
         </p>
       </div>
 
-      <PrimaryButton onClick={onBtnPay} disabled={bookedTicketData.paidOff}>
-        {bookedTicketData.paidOff ? 'Sudah Lunas' : 'Bayar'}
+      <PrimaryButton onClick={onBtnPay} disabled={disableButtonPay()}>
+        {ticketExpChecker(
+          bookedTicketData.bookedShift,
+          bookedTicketData.bookedDate
+        ) === false &&
+          bookedTicketData.paidOff &&
+          'Sudah Lunas'}
+
+        {ticketExpChecker(
+          bookedTicketData.bookedShift,
+          bookedTicketData.bookedDate
+        ) === false &&
+          !bookedTicketData.paidOff &&
+          'Bayar'}
+
+        {ticketExpChecker(
+          bookedTicketData.bookedShift,
+          bookedTicketData.bookedDate
+        ) && 'Tiket Hangus'}
       </PrimaryButton>
     </div>
   );
