@@ -1,15 +1,19 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
-import type { RootState } from '../store/store';
 import { createSlice } from '@reduxjs/toolkit';
+import type { RootState } from '../store/store';
 
-interface BookedTicketProps {
+export type TicketSitPos = 1 | 2 | 3 | 4 | 5;
+export type TicketShifts = 'morning' | 'afternoon';
+
+export interface BookedTicketProps {
   ticketId: string;
   bookedDate: string;
+  bookedShift: TicketShifts;
   destination: {
     to: string;
     from: string;
   };
-  sitPos: number;
+  sitPos: TicketSitPos;
   passangerName: string;
   passangerPhone: string;
   totalPayment: number;
@@ -28,13 +32,13 @@ export const userBookedTicketsSlice = createSlice({
   name: 'userBookedTickets',
   initialState,
   reducers: {
-    addBookedTicket: (state, action: PayloadAction<BookedTicketProps>) => {
-      state.data.push(action.payload);
+    setBookedTicket: (state, action: PayloadAction<BookedTicketProps[]>) => {
+      state.data = action.payload;
     },
   },
 });
 
-export const { addBookedTicket } = userBookedTicketsSlice.actions;
+export const { setBookedTicket } = userBookedTicketsSlice.actions;
 
 export const userBookedTicketsSelector = (state: RootState) =>
   state.userBookedTickets.data;
