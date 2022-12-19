@@ -2,6 +2,7 @@ import { useAppSelector } from '../../redux-app/typed-hook/typedHooks';
 import { bookTicketInputSelector } from '../../redux-app/slices/bookTicketSlice';
 import { bookTicketAvailabilitySelector } from '../../redux-app/slices/bookTicketAvailabilitySlice';
 import cityCodeIdn from '../../lib/cityCodeIdn';
+import { ticketExpChecker } from '../../lib/ticketExpChecker';
 
 export default function ShiftOptions() {
   const { bookFrom, bookTo, bookDate } = useAppSelector(
@@ -13,6 +14,10 @@ export default function ShiftOptions() {
   );
 
   const disableBookShiftOpt = (shift: 'morning' | 'afternoon') => {
+    const shiftIsExpired = ticketExpChecker(shift, bookDate);
+
+    if (shiftIsExpired) return true;
+
     const codeDst = bookTicketAvailabilityData.find(
       (bookTicketLoc) =>
         bookTicketLoc.codeDestination ===
