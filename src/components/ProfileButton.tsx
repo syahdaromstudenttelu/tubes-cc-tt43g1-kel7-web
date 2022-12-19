@@ -15,9 +15,11 @@ import {
   setTicketId,
 } from '../redux-app/slices/bookTicketSlice';
 import { useAppDispatch } from '../redux-app/typed-hook/typedHooks';
+import LoadingScreen from './LoadingScreen';
 
 export default function ProfileButton() {
   const [username, setUsername] = useState('');
+  const [redirectProcess, setRedirectProcess] = useState(false);
   const [closeProfileMenu, setCloseProfileMenu] = useState(true);
   const nextRouter = useRouter();
   const reduxDispatch = useAppDispatch();
@@ -25,6 +27,7 @@ export default function ProfileButton() {
   const onProfileMenu = () => setCloseProfileMenu((prevValue) => !prevValue);
 
   const onSignOut = async () => {
+    setRedirectProcess(() => true);
     reduxDispatch(setAlert({ alertMessage: '', showAlert: false }));
     reduxDispatch(setTicketId(''));
     reduxDispatch(setBookFrom('bandung'));
@@ -56,28 +59,31 @@ export default function ProfileButton() {
     return null;
   } else {
     return (
-      <div className="relative">
-        <button
-          type="button"
-          className="inline-block rounded bg-gray-200 px-2 py-1 font-semibold"
-          onClick={onProfileMenu}
-        >
-          Hi, {username}!
-        </button>
+      <>
+        <LoadingScreen hide={redirectProcess === false} />
+        <div className="relative">
+          <button
+            type="button"
+            className="inline-block rounded bg-gray-200 px-2 py-1 font-semibold"
+            onClick={onProfileMenu}
+          >
+            Hi, {username}!
+          </button>
 
-        <button
-          type="button"
-          className={cn(
-            'absolute top-[120%] left-0 inline-block w-full rounded bg-slate-600 px-2 py-1 font-semibold text-slate-100',
-            {
-              hidden: closeProfileMenu,
-            }
-          )}
-          onClick={onSignOut}
-        >
-          Keluar
-        </button>
-      </div>
+          <button
+            type="button"
+            className={cn(
+              'absolute top-[120%] left-0 inline-block w-full rounded bg-slate-600 px-2 py-1 font-semibold text-slate-100',
+              {
+                hidden: closeProfileMenu,
+              }
+            )}
+            onClick={onSignOut}
+          >
+            Keluar
+          </button>
+        </div>
+      </>
     );
   }
 }
