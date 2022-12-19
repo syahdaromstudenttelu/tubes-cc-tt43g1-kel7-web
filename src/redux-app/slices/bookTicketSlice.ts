@@ -1,10 +1,11 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
-import type { RootState } from '../store/store';
 import { createSlice } from '@reduxjs/toolkit';
+import type { RootState } from '../store/store';
 
-type TicketSitValue = 1 | 2 | 3 | 4 | 5 | null;
+export type TicketSitValue = 1 | 2 | 3 | 4 | 5 | null;
 
-interface BookTicketProps {
+export interface BookTicketProps {
+  bookTicketId: string;
   bookFrom: string;
   bookTo: string;
   bookDate: string;
@@ -16,6 +17,7 @@ interface BookTicketProps {
 }
 
 const initialState: BookTicketProps = {
+  bookTicketId: '',
   bookFrom: 'bandung',
   bookTo: 'bogor',
   bookDate: '',
@@ -30,6 +32,9 @@ export const bookTicketSlice = createSlice({
   name: 'bookTicket',
   initialState,
   reducers: {
+    setTicketId: (state, action: PayloadAction<string>) => {
+      state.bookTicketId = action.payload;
+    },
     setBookFrom: (state, action: PayloadAction<string>) => {
       if (action.payload === state.bookTo) state.bookTo = state.bookFrom;
       state.bookFrom = action.payload;
@@ -39,18 +44,23 @@ export const bookTicketSlice = createSlice({
       state.bookTo = action.payload;
     },
     setBookDate: (state, action: PayloadAction<string>) => {
-      const currentFullDate = new Date(Date.now());
-      const currentYear = currentFullDate.getFullYear();
-      const currentMonth = currentFullDate.getMonth();
-      const currentDate = currentFullDate.getDate();
-      const dateMsNow = Date.parse(
-        new Date(currentYear, currentMonth, currentDate).toISOString()
-      );
-      const dateMsPicked = Date.parse(new Date(action.payload).toISOString());
+      const inputDate = action.payload;
+      if (inputDate === '') {
+        state.bookDate = '';
+      } else {
+        const currentFullDate = new Date(Date.now());
+        const currentYear = currentFullDate.getFullYear();
+        const currentMonth = currentFullDate.getMonth();
+        const currentDate = currentFullDate.getDate();
+        const dateMsNow = Date.parse(
+          new Date(currentYear, currentMonth, currentDate).toISOString()
+        );
+        const dateMsPicked = Date.parse(new Date(action.payload).toISOString());
 
-      if (dateMsPicked - dateMsNow < 0) return;
+        if (dateMsPicked - dateMsNow < 0) return;
 
-      state.bookDate = action.payload;
+        state.bookDate = action.payload;
+      }
     },
     setBookShift: (state, action: PayloadAction<string>) => {
       state.bookShift = action.payload;
@@ -71,6 +81,7 @@ export const bookTicketSlice = createSlice({
 });
 
 export const {
+  setTicketId,
   setBookFrom,
   setBookTo,
   setBookDate,
