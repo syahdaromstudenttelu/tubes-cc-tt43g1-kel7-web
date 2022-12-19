@@ -7,6 +7,7 @@ import SitOptions from '../../../components/book-ticket-sit/SitOptions';
 import { SecondaryButtonLink } from '../../../components/button-links';
 import { PrimaryButton } from '../../../components/buttons';
 import ErrorMessage from '../../../components/ErrorMessage';
+import LoadingScreen from '../../../components/LoadingScreen';
 import ProfileButton from '../../../components/ProfileButton';
 import { interFont, ralewayFont } from '../../../lib/myNextFonts';
 import { useRedirectDashboard } from '../../../lib/react-custom-hooks/useRedirectDashboard';
@@ -27,6 +28,7 @@ import {
 } from '../../../redux-app/typed-hook/typedHooks';
 
 export default function BookTicketSit() {
+  const [redirectProcess, setRedirectProcess] = useState(false);
   const [redirectOnce, setRedirectOnce] = useState(false);
   const { updateTicketAvailability } = useTicketAvailability();
   const { username, userLogin } = useRedirectDashboard();
@@ -36,7 +38,7 @@ export default function BookTicketSit() {
     bookTicketInputSelector
   );
   const { showAlert, alertMessage } = useAppSelector(alertSelector);
-  const disableBookSitBtn = bookSitPos === null;
+  const disableBookSitBtn = bookSitPos === null || redirectProcess;
   const bookingTicketDateIsEmpty = bookDate === '' || bookShift === '';
 
   const onInputBookSit = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -46,11 +48,13 @@ export default function BookTicketSit() {
 
   const onBookNextBtn = () => {
     if (disableBookSitBtn) return;
+    setRedirectProcess(() => true);
     reduxDispatch(setAlert({ alertMessage: '', showAlert: false }));
     nextRouter.push(`/book-ticket/passanger-data`);
   };
 
   const onClearBookTicket = () => {
+    setRedirectProcess(() => true);
     reduxDispatch(setAlert({ alertMessage: '', showAlert: false }));
     reduxDispatch(setBookFrom('bandung'));
     reduxDispatch(setBookTo('bogor'));
@@ -91,6 +95,8 @@ export default function BookTicketSit() {
             content="initial-scale=1.0, width=device-width"
           />
         </Head>
+
+        <LoadingScreen hide={redirectProcess === false} />
 
         <div className="h-screen w-full">
           <div className="grid h-full grid-cols-2">

@@ -8,6 +8,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { PrimaryButton } from '../../components/buttons';
 import ErrorMessage from '../../components/ErrorMessage';
+import LoadingScreen from '../../components/LoadingScreen';
 import ProfileButton from '../../components/ProfileButton';
 import { interFont, ralewayFont } from '../../lib/myNextFonts';
 import { useApiEndpoint } from '../../lib/react-custom-hooks/useApiEndpoint';
@@ -34,6 +35,8 @@ import {
 
 export default function TicketPayment() {
   const [redirectOnce, setRedirectOnce] = useState(false);
+  const [paymentProcess, setPaymentProcess] = useState(false);
+  const [redirectProcess, setRedirectProcess] = useState(false);
   const [paymentName, setPaymentName] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const [showErrorMsg, setShowErrorMsg] = useState(false);
@@ -53,7 +56,8 @@ export default function TicketPayment() {
     bookTotalPayment,
     bookTicketId,
   } = useAppSelector(bookTicketInputSelector);
-  const bookingTicketDateIsEmpty = bookDate === '' || bookShift === '';
+  const bookingTicketDateIsEmpty =
+    bookDate === '' || bookShift === '' || paymentProcess;
   const bookingTicketSitIsEmpty = bookSitPos === null;
 
   const bookingTicketPassangerIsEmpty =
@@ -63,6 +67,7 @@ export default function TicketPayment() {
     paymentName === '' || ticketExpChecker(bookShift as TicketShifts, bookDate);
 
   const onClearBookTicket = () => {
+    setRedirectProcess(() => true);
     reduxDispatch(setTicketId(''));
     reduxDispatch(setBookFrom('bandung'));
     reduxDispatch(setBookTo('bogor'));
@@ -86,15 +91,17 @@ export default function TicketPayment() {
   const onPaymentBtn = async () => {
     try {
       if (ticketExpChecker(bookShift as TicketShifts, bookDate)) return;
+      setPaymentProcess(() => true);
 
       await axios.patch(bookTicketAPI, {
         uidToken: await getAuth().currentUser?.getIdToken(),
         ticketId: bookTicketId,
       });
 
+      await nextRouter.replace(`/${username}`);
       onClearBookTicket();
-      nextRouter.replace(`/${username}`);
     } catch (error) {
+      setPaymentProcess(() => false);
       setShowErrorMsg(() => true);
       setErrorMsg(() => 'Terjadi kesalahan pada jaringan Anda');
     }
@@ -151,6 +158,11 @@ export default function TicketPayment() {
             content="initial-scale=1.0, width=device-width"
           />
         </Head>
+
+        <LoadingScreen
+          hide={redirectProcess === false && paymentProcess === false}
+        />
+
         <div className="container mx-auto">
           <div className="max-w-8xl mx-auto pt-6 pb-10">
             <header className="mb-8">
@@ -312,7 +324,7 @@ export default function TicketPayment() {
                       disabled={disablePaymentBtn}
                       onClick={onPaymentBtn}
                     >
-                      Bayar
+                      {paymentProcess ? 'Sedang memproses...' : 'Bayar'}
                     </PrimaryButton>
                   </div>
                 </div>

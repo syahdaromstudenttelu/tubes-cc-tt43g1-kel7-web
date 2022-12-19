@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import { SecondaryButtonLink } from '../../../components/button-links';
 import { PrimaryButton } from '../../../components/buttons';
 import { Input } from '../../../components/form-inputs';
+import LoadingScreen from '../../../components/LoadingScreen';
 import ProfileButton from '../../../components/ProfileButton';
 import { interFont, ralewayFont } from '../../../lib/myNextFonts';
 import { useApiEndpoint } from '../../../lib/react-custom-hooks/useApiEndpoint';
@@ -41,6 +42,8 @@ interface BookTicketErrorDataProps {
 export default function BookTicketSit() {
   const [redirectOnce, setRedirectOnce] = useState(false);
   const { bookTicketAPI } = useApiEndpoint();
+  const [bookingProcess, setBookingProcess] = useState(false);
+  const [redirectProcess, setRedirectProcess] = useState(false);
   const { updateTicketAvailability } = useTicketAvailability();
   const { username, userLogin } = useRedirectDashboard();
   const nextRouter = useRouter();
@@ -55,7 +58,7 @@ export default function BookTicketSit() {
     bookPassangerPhone,
   } = useAppSelector(bookTicketInputSelector);
   const disableBookingBtn =
-    bookPassangerName === '' || bookPassangerPhone === '';
+    bookPassangerName === '' || bookPassangerPhone === '' || bookingProcess;
   const bookingTicketDateIsEmpty = bookDate === '' || bookShift === '';
   const bookingTicketSitIsEmpty = bookSitPos === null;
 
@@ -71,6 +74,7 @@ export default function BookTicketSit() {
 
   const onBookTicketBtn = async () => {
     try {
+      setBookingProcess(() => true);
       const response = await axios.post(bookTicketAPI, {
         uidToken: await getAuth()?.currentUser?.getIdToken(),
         bookFrom,
@@ -152,10 +156,13 @@ export default function BookTicketSit() {
         );
         nextRouter.push('/book-ticket/date');
       }
+
+      setBookingProcess(() => false);
     }
   };
 
   const onClearBookTicket = () => {
+    setRedirectProcess(() => true);
     reduxDispatch(setBookFrom('bandung'));
     reduxDispatch(setBookTo('bogor'));
     reduxDispatch(setBookDate(''));
@@ -203,6 +210,10 @@ export default function BookTicketSit() {
             content="initial-scale=1.0, width=device-width"
           />
         </Head>
+
+        <LoadingScreen
+          hide={redirectProcess === false && bookingProcess === false}
+        />
 
         <div className="h-screen w-full">
           <div className="grid h-full grid-cols-2">
@@ -310,7 +321,7 @@ export default function BookTicketSit() {
                             disabled={disableBookingBtn}
                             onClick={onBookTicketBtn}
                           >
-                            Booking
+                            {bookingProcess ? 'Sedang memproses...' : 'Booking'}
                           </PrimaryButton>
                         </div>
 

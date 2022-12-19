@@ -9,6 +9,7 @@ import isEmpty from 'validator/lib/isEmpty';
 import { PrimaryButton } from '../../components/buttons';
 import ErrorMessage from '../../components/ErrorMessage';
 import { Input } from '../../components/form-inputs';
+import LoadingScreen from '../../components/LoadingScreen';
 import RegisterError from '../../lib/error-class/RegisterError';
 import { ralewayFont } from '../../lib/myNextFonts';
 import { useRedirectHome } from '../../lib/react-custom-hooks/useRedirectHome';
@@ -17,11 +18,15 @@ export default function Register() {
   const [userEmail, setUserEmail] = useState('');
   const [userPassword, setUserPassword] = useState('');
   const [showErrorMsg, setShowErrorMsg] = useState(false);
+  const [registerProcess, setRegisterProcess] = useState(false);
   const [errorMsg, setErrorMsg] = useState('Maaf, terjadi kesalahan');
   const { userLogin } = useRedirectHome();
   const nextRouter = useRouter();
   const btnDisabledStatus =
-    userEmail === '' || userPassword === '' || userPassword.length < 6;
+    userEmail === '' ||
+    userPassword === '' ||
+    userPassword.length < 6 ||
+    registerProcess;
 
   const onEmailInput = (e: ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.currentTarget.value;
@@ -35,6 +40,8 @@ export default function Register() {
 
   const onRegister = async () => {
     try {
+      if (registerProcess) return;
+      setRegisterProcess(() => true);
       setShowErrorMsg(() => false);
 
       const emailIsEmpty = isEmpty(userEmail, { ignore_whitespace: true });
@@ -42,9 +49,9 @@ export default function Register() {
       if (emailIsEmpty)
         throw new RegisterError('Mohon isi email Anda dengan benar', 'email');
 
-      const passwordIsEmpty = userPassword.length < 0;
+      const passwordIsInvalid = userPassword.length < 6;
 
-      if (passwordIsEmpty)
+      if (passwordIsInvalid)
         throw new RegisterError(
           'Mohon isi password Anda minimal 6 karakter',
           'password-length'
@@ -93,6 +100,7 @@ export default function Register() {
         setErrorMsg('Mohon isi password Anda minimal 6 karakter');
       }
 
+      setRegisterProcess(() => false);
       setShowErrorMsg(() => true);
     }
   };
@@ -109,6 +117,8 @@ export default function Register() {
             content="initial-scale=1.0, width=device-width"
           />
         </Head>
+
+        <LoadingScreen hide={registerProcess === false} />
 
         <div className="h-screen w-full">
           <div className="grid h-full items-center">
@@ -165,7 +175,7 @@ export default function Register() {
                       disabled={btnDisabledStatus}
                       onClick={onRegister}
                     >
-                      Buat akun
+                      {registerProcess ? 'Sedang memproses...' : 'Buat akun'}
                     </PrimaryButton>
                   </section>
                 </form>
