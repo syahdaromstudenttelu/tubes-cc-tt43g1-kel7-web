@@ -4,6 +4,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import BookedTicketCard from '../../components/BookedTicketCard';
+import LoadingScreen from '../../components/LoadingScreen';
 import ProfileButton from '../../components/ProfileButton';
 import { interFont, ralewayFont } from '../../lib/myNextFonts';
 import { useApiEndpoint } from '../../lib/react-custom-hooks/useApiEndpoint';
@@ -22,6 +23,8 @@ import {
 export default function Dashboard() {
   const [updateOnce, setUpdateOnce] = useState(false);
   const { bookedTicketsAPI } = useApiEndpoint();
+  const [redirectProcess, setRedirectProcess] = useState(false);
+  const [loadUserBookedTickets, setLoadUserBookedTickets] = useState(false);
   const { updateTicketAvailability } = useTicketAvailability();
   const { userLogin } = useRedirectDashboard();
   const nextRouter = useRouter();
@@ -29,6 +32,7 @@ export default function Dashboard() {
   const userBookedTickets = useAppSelector(userBookedTicketsSelector);
 
   const onBookTicket = async () => {
+    setRedirectProcess(() => true);
     await updateTicketAvailability();
     nextRouter.push('/book-ticket/date');
   };
@@ -36,6 +40,7 @@ export default function Dashboard() {
   useEffect(() => {
     if (userLogin === false || updateOnce === true) return;
     const updateUserBookedTickets = async () => {
+      setLoadUserBookedTickets(() => true);
       const response = await axios.get(bookedTicketsAPI, {
         params: {
           uidToken: await getAuth().currentUser?.getIdToken(),
@@ -44,6 +49,7 @@ export default function Dashboard() {
       const responseData = response.data;
       const userBookedTickets: BookedTicketProps[] = responseData.data;
 
+      setLoadUserBookedTickets(() => false);
       reduxDispatch(setBookedTicket(userBookedTickets));
     };
 
@@ -72,9 +78,12 @@ export default function Dashboard() {
             content="initial-scale=1.0, width=device-width"
           />
         </Head>
+
+        <LoadingScreen hide={redirectProcess === false} />
+
         <div className="container mx-auto">
           <div className="max-w-8xl mx-auto pt-6 pb-10">
-            <header className="mb-8">
+            <header className="mb-16">
               <nav className="mb-8 flex items-center justify-between">
                 <div>
                   <button
@@ -98,20 +107,34 @@ export default function Dashboard() {
             </header>
 
             <main>
-              {userBookedTickets.length === 0 && (
-                <p className="mx-auto w-max rounded-md bg-gray-200 px-3 py-2 text-center text-gray-500">
-                  Anda belum memesan tiket sebelumnya.{' '}
-                  <button className="underline" onClick={onBookTicket}>
-                    Yukk, pesan tiket sekarang
-                  </button>
-                </p>
-              )}
+              <div className="relative min-h-[300px] rounded-2xl px-4">
+                <div className="absolute top-0 left-0 z-0 h-full w-full">
+                  <div className="flex h-full w-full items-center justify-center">
+                    {userBookedTickets.length === 0 &&
+                      loadUserBookedTickets === false && (
+                        <p className="mx-auto w-max rounded-md bg-slate-300 px-3 py-2 text-center text-gray-500">
+                          Anda belum memesan tiket sebelumnya.{' '}
+                          <button className="underline" onClick={onBookTicket}>
+                            Yukk, pesan tiket sekarang
+                          </button>
+                        </p>
+                      )}
 
-              {userBookedTickets.length !== 0 && (
-                <div className="grid w-full grid-cols-3 gap-4 pt-6">
-                  {userBookedTicketCards}
+                    {loadUserBookedTickets && (
+                      <p className="mx-auto w-max rounded-md bg-slate-300 px-3 py-2 text-center text-gray-500">
+                        Memuat tiket Anda...
+                      </p>
+                    )}
+                  </div>
                 </div>
-              )}
+
+                {userBookedTickets.length !== 0 &&
+                  loadUserBookedTickets === false && (
+                    <div className=" relative z-[5] grid w-full grid-cols-3 gap-4">
+                      {userBookedTicketCards}
+                    </div>
+                  )}
+              </div>
             </main>
           </div>
         </div>

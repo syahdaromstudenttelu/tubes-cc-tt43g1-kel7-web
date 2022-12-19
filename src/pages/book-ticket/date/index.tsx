@@ -1,11 +1,12 @@
 import { format } from 'date-fns';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import type { ChangeEvent } from 'react';
+import { ChangeEvent, useState } from 'react';
 import CityOptions from '../../../components/book-ticket-date/CityOptions';
 import ShiftOptions from '../../../components/book-ticket-date/ShiftOptions';
 import { PrimaryButton } from '../../../components/buttons';
 import ErrorMessage from '../../../components/ErrorMessage';
+import LoadingScreen from '../../../components/LoadingScreen';
 import ProfileButton from '../../../components/ProfileButton';
 import { interFont, ralewayFont } from '../../../lib/myNextFonts';
 import { useRedirectDashboard } from '../../../lib/react-custom-hooks/useRedirectDashboard';
@@ -24,6 +25,7 @@ import {
 } from '../../../redux-app/typed-hook/typedHooks';
 
 export default function BookTicketDate() {
+  const [redirectProcess, setRedirectProcess] = useState(false);
   const { username, userLogin } = useRedirectDashboard();
   const nextRouter = useRouter();
   const reduxDispatch = useAppDispatch();
@@ -32,7 +34,11 @@ export default function BookTicketDate() {
   );
   const { showAlert, alertMessage } = useAppSelector(alertSelector);
   const disableBookSitBtn =
-    bookFrom === '' || bookTo === '' || bookDate === '' || bookShift === '';
+    bookFrom === '' ||
+    bookTo === '' ||
+    bookDate === '' ||
+    bookShift === '' ||
+    redirectProcess;
   const disableBookShiftSelector = bookDate === '';
 
   const onInputBookFrom = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -62,11 +68,13 @@ export default function BookTicketDate() {
 
   const onBookSitBtn = () => {
     if (disableBookSitBtn) return;
+    setRedirectProcess(() => true);
     reduxDispatch(setAlert({ alertMessage: '', showAlert: false }));
     nextRouter.push(`/book-ticket/sit`);
   };
 
   const onClearBookTicket = () => {
+    setRedirectProcess(() => true);
     reduxDispatch(setAlert({ alertMessage: '', showAlert: false }));
     reduxDispatch(setBookFrom('bandung'));
     reduxDispatch(setBookTo('bogor'));
@@ -87,6 +95,8 @@ export default function BookTicketDate() {
             content="initial-scale=1.0, width=device-width"
           />
         </Head>
+
+        <LoadingScreen hide={redirectProcess === false} />
 
         <div className="h-screen w-full">
           <div className="grid h-full grid-cols-2">
