@@ -12,7 +12,7 @@ export const useApiEndpoint = () => {
       setBookedTicketsAPI(() => `${devAPI}/bookedTickets`);
     } else {
       setBookTicketAPI(() => `${prodAPI}/bookTicket`);
-      setBookTicketAPI(() => `${prodAPI}/bookedTickets`);
+      setBookedTicketsAPI(() => `${prodAPI}/bookedTickets`);
     }
   }, []);
 
