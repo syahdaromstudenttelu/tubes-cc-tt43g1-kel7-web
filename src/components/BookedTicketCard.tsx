@@ -125,13 +125,7 @@ export default function BookedTicketCard({
             !redirectProcess &&
             'Bayar'}
 
-          {ticketExpChecker(
-            bookedTicketData.bookedShift,
-            bookedTicketData.bookedDate
-          ) === false &&
-            !bookedTicketData.paidOff &&
-            redirectProcess &&
-            'Sedang memproses...'}
+          {redirectProcess && 'Sedang memproses...'}
 
           {ticketExpChecker(
             bookedTicketData.bookedShift,
