@@ -115,13 +115,7 @@ export default function BookedTicketCard({
         </div>
 
         <PrimaryButton onClick={onBtnPay} disabled={disableButtonPay()}>
-          {ticketExpChecker(
-            bookedTicketData.bookedShift,
-            bookedTicketData.bookedDate
-          ) === false &&
-            bookedTicketData.paidOff &&
-            !redirectProcess &&
-            'Sudah Lunas'}
+          {bookedTicketData.paidOff && !redirectProcess && 'Sudah Lunas'}
 
           {ticketExpChecker(
             bookedTicketData.bookedShift,
@@ -131,13 +125,7 @@ export default function BookedTicketCard({
             !redirectProcess &&
             'Bayar'}
 
-          {ticketExpChecker(
-            bookedTicketData.bookedShift,
-            bookedTicketData.bookedDate
-          ) === false &&
-            !bookedTicketData.paidOff &&
-            redirectProcess &&
-            'Sedang memproses...'}
+          {redirectProcess && 'Sedang memproses...'}
 
           {ticketExpChecker(
             bookedTicketData.bookedShift,
