@@ -1,4 +1,5 @@
 import { initializeApp } from 'firebase/app';
+import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check';
 import { connectAuthEmulator, getAuth } from 'firebase/auth';
 import { connectFunctionsEmulator, getFunctions } from 'firebase/functions';
 import type { ReactNode } from 'react';
@@ -18,7 +19,11 @@ const firebaseConfig = {
   measurementId: 'G-3MKG70KY9Y',
 };
 
-initializeApp(firebaseConfig);
+const firebaseApp = initializeApp(firebaseConfig);
+initializeAppCheck(firebaseApp, {
+  provider: new ReCaptchaV3Provider('6LfrCZsjAAAAAA-lP-ca0TbRJ7BT--xP3FSMo4pB'),
+  isTokenAutoRefreshEnabled: true,
+});
 
 export default function FirebaseApp({ children }: FirebaseAppProps) {
   const [initFirebaseEnv, setInitFirebaseEnv] = useState(false);
