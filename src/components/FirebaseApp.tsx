@@ -20,10 +20,6 @@ const firebaseConfig = {
 };
 
 const firebaseApp = initializeApp(firebaseConfig);
-initializeAppCheck(firebaseApp, {
-  provider: new ReCaptchaV3Provider('6LfrCZsjAAAAAA-lP-ca0TbRJ7BT--xP3FSMo4pB'),
-  isTokenAutoRefreshEnabled: true,
-});
 
 export default function FirebaseApp({ children }: FirebaseAppProps) {
   const [initFirebaseEnv, setInitFirebaseEnv] = useState(false);
@@ -33,6 +29,13 @@ export default function FirebaseApp({ children }: FirebaseAppProps) {
       connectAuthEmulator(getAuth(), 'http://127.0.0.1:9099');
       connectFunctionsEmulator(getFunctions(), '127.0.0.1', 5001);
     }
+
+    initializeAppCheck(firebaseApp, {
+      provider: new ReCaptchaV3Provider(
+        '6LfrCZsjAAAAAA-lP-ca0TbRJ7BT--xP3FSMo4pB'
+      ),
+      isTokenAutoRefreshEnabled: true,
+    });
 
     setInitFirebaseEnv(() => true);
   }, []);
