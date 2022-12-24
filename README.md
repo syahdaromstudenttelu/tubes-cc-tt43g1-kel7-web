@@ -1,4 +1,4 @@
-# Tugas Besar Cloud Computing TT-43-G1
+# Tugas Besar Cloud Computing TT-43-G1 (Serverless)
 
 ## Kelompok 7
 
